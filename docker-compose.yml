@@ -1,0 +1,12 @@
+version: '3'
+services:
+  axon-server:
+    image: axoniq/axonserver:4.2.2-jdk11
+  github-workitems-resolver:
+    depends_on:
+      - axon-server
+    image: registry.gitlab.com/dominiccobo-fyp/github-workitems-resolver:latest
+  gitlab-workitems-resolver:
+    depends_on:
+      - axon-server
+    image: registry.gitlab.com/dominiccobo-fyp/gitlab-workitems-resolver:latest
