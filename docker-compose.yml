@@ -26,6 +26,19 @@ services:
       - interfacing
     env_file:
       - all.env
+  github-contributor-experts-resolver:
+    container_name: gh-contrib-experts
+    depends_on:
+      - axon-server
+    image: registry.gitlab.com/dominiccobo-fyp/github-experts-resolver:latest
+    restart: always
+    environment:
+      - AXON_SERVER_HOSTNAME=axonserver
+    networks:
+      - app_net
+      - interfacing
+    env_file:
+      - all.env
   gitlab-workitems-resolver:
     container_name: gl-workitems
     restart: always
