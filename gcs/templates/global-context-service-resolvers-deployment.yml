@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-workitems-resolver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-workitems
+  template:
+    metadata:
+      labels:
+        app: github-workitems
+    spec:
+      containers:
+        - name: github-workitems
+          image: docker.pkg.github.com/dominiccobo-fyp/github-workitems-resolver/github-workitems-resolver:0.2.1
+          env:
+            - name: AXON_SERVER_HOSTNAME
+              value: axonserver.{{ .Release.Namespace }}
+            - name: GITHUB_OAUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: github
+                  key: oauth-token
+                  optional: false
+      imagePullSecrets:
+        - name: ghdocker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-workitems-resolver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitlab-workitems
+  template:
+    metadata:
+      labels:
+        app: gitlab-workitems
+    spec:
+      containers:
+        - name: gitlab-workitems
+          image: docker.pkg.github.com/dominiccobo-fyp/gitlab-workitems-resolver/gitlab-workitems-resolver:0.1.2
+          env:
+            - name: GITLAB_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: oauth-token
+                  name: gitlab
+                  optional: false
+            - name: GITLAB_HOST_URL
+              value: 'https://gitlab.com'
+            - name: AXON_SERVER_HOSTNAME
+              value: axonserver.{{ .Release.Namespace }}
+      imagePullSecrets:
+        - name: ghdocker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-experts-resolver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-experts
+  template:
+    metadata:
+      labels:
+        app: github-experts
+    spec:
+      containers:
+        - name: github-experts
+          image: docker.pkg.github.com/dominiccobo-fyp/github-experts-resolver/github-experts-resolver:0.1.0
+          env:
+            - name: AXON_SERVER_HOSTNAME
+              value: axonserver.{{ .Release.Namespace }}
+            - name: GITHUB_OAUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: github
+                  key: oauth-token
+                  optional: false
+      imagePullSecrets:
+        - name: ghdocker
