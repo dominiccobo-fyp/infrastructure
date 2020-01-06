@@ -46,7 +46,7 @@ spec:
       targetPort: 8024
       nodePort: 32024
   selector:
-    app: axonserver
+    app.kubernetes.io/name: axonserver
 ---
 apiVersion: v1
 kind: Service
@@ -62,4 +62,4 @@ spec:
       targetPort: 8124
       nodePort: 31024
   selector:
-    app: axonserver
+    app.kubernetes.io/name: axonserver
