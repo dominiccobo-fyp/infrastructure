@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: github-workitems
-          image: docker.pkg.github.com/dominiccobo-fyp/github-workitems-resolver/github-workitems-resolver:0.2.1
+          image: docker.pkg.github.com/dominiccobo-fyp/github-workitems-resolver/github-workitems-resolver:0.6.1
           env:
             - name: AXON_SERVER_HOSTNAME
               value: axonserver.{{ .Release.Namespace }}
@@ -74,7 +74,7 @@ spec:
     spec:
       containers:
         - name: github-experts
-          image: docker.pkg.github.com/dominiccobo-fyp/github-experts-resolver/github-experts-resolver:0.1.0
+          image: docker.pkg.github.com/dominiccobo-fyp/github-experts-resolver/github-experts-resolver:0.2.0
           env:
             - name: AXON_SERVER_HOSTNAME
               value: axonserver.{{ .Release.Namespace }}
@@ -84,5 +84,28 @@ spec:
                   name: github
                   key: oauth-token
                   optional: false
+      imagePullSecrets:
+        - name: ghdocker
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stackexchange-documentation-resolver-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stackexchange-documentation
+  template:
+    metadata:
+      labels:
+        app: stackexchange-documentation
+    spec:
+      containers:
+        - name: stackexchange-documentation
+          image: docker.pkg.github.com/dominiccobo-fyp/stackexchange-documentation-resolver/stackexchange-documentation-resolver:0.2.1
+          env:
+            - name: AXON_SERVER_HOSTNAME
+              value: axonserver.{{ .Release.Namespace }}
       imagePullSecrets:
         - name: ghdocker
